@@ -6,9 +6,9 @@ const { orderStream, orders, getOrder, someget, cheackTypeValute, spread } = mai
 
 onBeforeMount(async () => {
   getOrder()
-  setInterval(() => {
-    getOrder()
-  }, 1000)
+  // setInterval(() => {
+  //   getOrder()
+  // }, 1000)
 })
 </script>
 <template>

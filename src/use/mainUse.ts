@@ -62,12 +62,22 @@ export const main = () => {
 	}
 
   const getOrder = () => {
-		axios
-		.get(
-			"https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,LTC&tsyms=USD"
-		)
-		.then((response) => {
+
+		const get = () => {
+			return axios
+			.get(
+				"https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,LTC&tsyms=USD"
+			)
+		}
+
+		
+		get().then((response) => {
 			someget.value = response.data.DISPLAY;
+			setInterval(() => {
+				getOrder()
+			}, 1000)
+		}).catch((error)=>{
+			console.error(error);
 		});
   };
 
