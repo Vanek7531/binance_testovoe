@@ -1,44 +1,57 @@
 <script setup lang="ts">
-import { main } from '@/use/mainUse'
-import { onBeforeMount, watch } from 'vue'
+import { main } from "@/use/mainUse";
+import { onBeforeMount, watch } from "vue";
 
-const { orderStream, orders, getOrder, someget, cheackTypeValute, spread } = main()
+const {  orders, getOrder,  cheackTypeValute, spread } =
+  main();
+
+const props = defineProps({
+	currency: {
+      type: String,
+      default: '',
+    },
+  })
 
 onBeforeMount(async () => {
-  getOrder()
-  // setInterval(() => {
-  //   getOrder()
-  // }, 1000)
-})
+  getOrder();
+});
 </script>
 <template>
-  <!-- <pre>{{someget}}12</pre> -->
-  <div class="order">
-    <div class="w">Name</div>
-    <div class="w">Count</div>
-    <div class="w">Spread</div>
-    <div class="w">Price</div>
+	{{ currency }}
+  <div v-if="orders">
+    <div class="order">
+      <div class="order-column">Name</div>
+      <div class="order-column">Count</div>
+      <div class="order-column">Spread</div>
+      <div class="order-column">Price</div>
+    </div>
+    <div
+      class="order"
+      :class="order.USD.FROMSYMBOL === 'Ξ' ? 'border' : ''"
+      v-for="(order, ids) in orders"
+      :key="ids"
+    >
+      <!-- знаю что индекс для ключа использовать не стоит, но нет id -->
+      <div class="order-pair order-column">
+        <div>{{ cheackTypeValute(order[currency].FROMSYMBOL) }}</div>
+      </div>
+      <div class="order-amount order-column">
+        <div>{{ order[currency].SUPPLY }}</div>
+      </div>
+      <div
+        :class="spread(order.USD.CHANGEPCTHOUR) ? 'red' : 'green'"
+        class="order-spread w"
+      >
+        <div>{{ order[currency].CHANGEPCTHOUR }}</div>
+      </div>
+      <div class="order-price order-column">
+        <div>{{ order[currency].PRICE }}</div>
+      </div>
+    </div>
   </div>
-  <div
-    class="order"
-    :class="order.USD.FROMSYMBOL === 'Ξ' ? 'border' : ''"
-    v-for="(order, ids) in someget" :key="ids"
-  >
-	<!-- знаю что индекс для ключа использовать не стоит, но нет id -->
-    <div class="order-pair w">
-      <div>{{ cheackTypeValute(order.USD.FROMSYMBOL) }}</div>
-      <!-- <div v-else>Bitcoin</div> -->
-    </div>
-    <div class="order-amount w">
-      <div>{{ order.USD.SUPPLY }}</div>
-    </div>
-    <div :class="spread(order.USD.CHANGEPCTHOUR) ? 'red' : 'green'" class="order-spread w">
-      <div>{{order.USD.CHANGEPCTHOUR}}</div>
-    </div>
-    <div class="order-price w">
-      <div>{{ order.USD.PRICE }}</div>
-    </div>
-  </div>
+	<div class="order-column" v-else>
+		Упс произошла ошибка...
+	</div>
 </template>
 
 <style scoped lang="scss">
@@ -50,7 +63,7 @@ onBeforeMount(async () => {
   margin-top: -2px;
   padding-top: 2px;
 }
-.w {
+.order-column {
   text-align: center;
 
   min-width: 100px;
@@ -61,9 +74,9 @@ onBeforeMount(async () => {
 }
 
 .red {
-	color: red;
+  color: red;
 }
 .green {
-	color: green;
+  color: green;
 }
 </style>

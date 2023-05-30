@@ -2,6 +2,7 @@
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
 import MainComp from './components/MainComp.vue';
+
 </script>
 
 <template>
@@ -9,7 +10,8 @@ import MainComp from './components/MainComp.vue';
   </header>
 
   <main>
-		<main-comp></main-comp>
+		<main-comp :currency="`USD`"></main-comp>
+		<main-comp :currency="`EUR`"></main-comp>
   </main>
 </template>
 
