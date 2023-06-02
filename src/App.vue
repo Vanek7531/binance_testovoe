@@ -10,8 +10,7 @@ import MainComp from './components/MainComp.vue';
   </header>
 
   <main>
-		<main-comp :currency="`USD`"></main-comp>
-		<main-comp :currency="`EUR`"></main-comp>
+		<main-comp ></main-comp>
   </main>
 </template>
 

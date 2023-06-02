@@ -2,81 +2,47 @@
 import { main } from "@/use/mainUse";
 import { onBeforeMount, watch } from "vue";
 
-const {  orders, getOrder,  cheackTypeValute, spread } =
+const {  status, getStatus, columnsort, postDeals } =
   main();
 
-const props = defineProps({
-	currency: {
-      type: String,
-      default: '',
-    },
-  })
-
 onBeforeMount(async () => {
-  getOrder();
+  getStatus();
+	postDeals()
 });
 </script>
 <template>
-	{{ currency }}
-  <div v-if="orders">
-    <div class="order">
-      <div class="order-column">Name</div>
-      <div class="order-column">Count</div>
-      <div class="order-column">Spread</div>
-      <div class="order-column">Price</div>
-    </div>
-    <div
-      class="order"
-      :class="order.USD.FROMSYMBOL === 'Ξ' ? 'border' : ''"
-      v-for="(order, ids) in orders"
-      :key="ids"
-    >
-      <!-- знаю что индекс для ключа использовать не стоит, но нет id -->
-      <div class="order-pair order-column">
-        <div>{{ cheackTypeValute(order[currency].FROMSYMBOL) }}</div>
-      </div>
-      <div class="order-amount order-column">
-        <div>{{ order[currency].SUPPLY }}</div>
-      </div>
-      <div
-        :class="spread(order.USD.CHANGEPCTHOUR) ? 'red' : 'green'"
-        class="order-spread w"
-      >
-        <div>{{ order[currency].CHANGEPCTHOUR }}</div>
-      </div>
-      <div class="order-price order-column">
-        <div>{{ order[currency].PRICE }}</div>
-      </div>
-    </div>
-  </div>
-	<div class="order-column" v-else>
-		Упс произошла ошибка...
+	<div class="columns">
+		<div class="column" v-for="order in status" :key="order.STATUS_ID">
+			{{ order.TITLE }}
+			<div class="card" v-for ="item in columnsort(order.TITLE)" :key="item">
+				<div>№{{item.OFFER_ID}}</div>
+				<div>{{ item.CONTACT_TITLE }}</div>
+				<div>{{item.SEGMENT_NAME}}</div>
+				<div>{{item.OFFER_FIRST_RESPONSIBLE}}</div>
+			</div>
+		</div>
 	</div>
 </template>
 
 <style scoped lang="scss">
-.order {
-  display: flex;
-  justify-content: space-between;
-  border: 1px solid grey;
-  border-collapse: collapse;
-  margin-top: -2px;
-  padding-top: 2px;
+.columns{
+	display: flex;
+	justify-content: space-between;
+	// gap: 20px;
 }
-.order-column {
-  text-align: center;
-
-  min-width: 100px;
-}
-.border {
-  position: relative;
-  border: 2px solid red;
+.column{
+	min-width: 100px;
+	display: flex;
+	gap: 20px;
+	padding: 0 20px;
+	flex-direction: column;
+	border: 1px solid black;
+	background: gray;
 }
 
-.red {
-  color: red;
+.card{
+	border: 1px solid white;
+	padding: 5px;
 }
-.green {
-  color: green;
-}
+
 </style>
